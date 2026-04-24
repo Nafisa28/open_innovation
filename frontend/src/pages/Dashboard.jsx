@@ -53,7 +53,7 @@ export default function Dashboard() {
   const handleAnalyzeCrop = async () => {
     setLoading(true); setError(null); setCropResults(null);
     try {
-      const BASE_URL = 'https://agrovision-backend-g2gg.onrender.com';
+      const BASE_URL = 'https://agrovision-backend-g2gg.onrender.com/api';
       const weatherRes = await fetch(`${BASE_URL}/weather?location=${location || 'Delhi'}`);
       const weatherData = await weatherRes.json();
       if (weatherData.error) throw new Error(weatherData.error);
@@ -75,7 +75,7 @@ export default function Dashboard() {
   const handleAnalyzeIrrigation = async () => {
     setLoading(true); setError(null); setIrrResults(null);
     try {
-      const BASE_URL = 'http://localhost:5000/api';
+      const BASE_URL = 'https://agrovision-backend-g2gg.onrender.com/api';
       const weatherRes = await fetch(`${BASE_URL}/weather?location=${location || 'Delhi'}`);
       const weatherData = await weatherRes.json();
       if (weatherData.error) throw new Error(weatherData.error);
