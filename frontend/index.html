@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroVision AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              agro: {
+                green: '#2e7d32',
+                lightGreen: '#81c784',
+                brown: '#795548',
+                lightBrown: '#a1887f',
+                sky: '#81d4fa',
+              }
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script>
+      window.addEventListener("error", function(e) {
+        document.body.innerHTML += "<div style='color:red; background:white; position:absolute; top:0; z-index:9999; padding:20px'><h1>Error</h1><p>" + e.message + "</p><pre>" + (e.error ? e.error.stack : '') + "</pre></div>";
+      });
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
