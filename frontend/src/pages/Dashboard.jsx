@@ -29,7 +29,8 @@ export default function Dashboard() {
       navigator.geolocation.getCurrentPosition(async (position) => {
         const { latitude, longitude } = position.coords;
         try {
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          const langCode = language === 'English' ? 'en' : language === 'Hindi' ? 'hi' : 'kn';
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=${langCode}`);
           const data = await res.json();
           setLocation(data.address.city || data.address.town || data.address.village || 'Unknown Location');
         } catch (e) {
