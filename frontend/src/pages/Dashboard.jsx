@@ -4,15 +4,15 @@ import { useLanguage } from '../context/LanguageContext';
 
 export default function Dashboard() {
   const { language, t, translateExact } = useLanguage();
-  
+
   const [activeTab, setActiveTab] = useState('crop'); // 'crop' or 'irrigation'
-  
+
   // Shared Input State
   const [location, setLocation] = useState('');
   const [soilType, setSoilType] = useState('Loamy');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
+
   // Crop Tab State
   const [season, setSeason] = useState('Kharif');
   const [cropResults, setCropResults] = useState(null);
@@ -53,7 +53,7 @@ export default function Dashboard() {
   const handleAnalyzeCrop = async () => {
     setLoading(true); setError(null); setCropResults(null);
     try {
-      const BASE_URL = 'http://localhost:5000/api';
+      const BASE_URL = 'https://agrovision-backend-g2gg.onrender.com';
       const weatherRes = await fetch(`${BASE_URL}/weather?location=${location || 'Delhi'}`);
       const weatherData = await weatherRes.json();
       if (weatherData.error) throw new Error(weatherData.error);
@@ -101,19 +101,19 @@ export default function Dashboard() {
 
       const irrRes = await fetch(`${BASE_URL}/irrigation`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          rainfall: weatherData.rainfall, 
-          temperature: weatherData.temperature, 
-          crop_type: finalCropType, 
-          current_moisture: currentMoisture 
+        body: JSON.stringify({
+          rainfall: weatherData.rainfall,
+          temperature: weatherData.temperature,
+          crop_type: finalCropType,
+          current_moisture: currentMoisture
         })
       });
       const irrData = await irrRes.json();
 
-      setIrrResults({ 
-        weather: weatherData, 
-        crop: detectedCrop, 
-        soil: detectedSoil, 
+      setIrrResults({
+        weather: weatherData,
+        crop: detectedCrop,
+        soil: detectedSoil,
         irrigation: irrData.advice,
         thresholdData: irrData
       });
@@ -127,7 +127,7 @@ export default function Dashboard() {
   const speakText = (resultsObj, type) => {
     if (!resultsObj || !('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
-    
+
     let textToSpeak = "";
     if (type === 'crop') {
       if (language === 'Hindi') {
@@ -146,7 +146,7 @@ export default function Dashboard() {
         textToSpeak = `Irrigation advice: ${translateExact(resultsObj.irrigation)}`;
       }
     }
-    
+
     const utterance = new SpeechSynthesisUtterance(textToSpeak);
     utterance.lang = language === 'English' ? 'en-US' : language === 'Hindi' ? 'hi-IN' : 'kn-IN';
     window.speechSynthesis.speak(utterance);
@@ -156,14 +156,14 @@ export default function Dashboard() {
     <div className="w-full max-w-7xl mx-auto">
       {/* TABS */}
       <div className="flex space-x-4 mb-8 justify-center">
-        <button 
+        <button
           onClick={() => setActiveTab('crop')}
           className={`flex items-center gap-2 px-8 py-4 rounded-xl font-bold transition text-lg shadow-sm
             ${activeTab === 'crop' ? 'bg-agro-green text-white scale-105' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
         >
           <Sprout size={24} /> {t.cropTab || "Crop Recommendations"}
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab('irrigation')}
           className={`flex items-center gap-2 px-8 py-4 rounded-xl font-bold transition text-lg shadow-sm
             ${activeTab === 'irrigation' ? 'bg-agro-sky text-white scale-105' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
@@ -219,8 +219,8 @@ export default function Dashboard() {
                   </label>
                   <span className="font-bold text-blue-600">{currentMoisture}%</span>
                 </div>
-                <input 
-                  type="range" min="0" max="100" value={currentMoisture} 
+                <input
+                  type="range" min="0" max="100" value={currentMoisture}
                   onChange={(e) => setCurrentMoisture(e.target.value)}
                   className="w-full accent-blue-500"
                 />
@@ -242,8 +242,8 @@ export default function Dashboard() {
             </>
           )}
 
-          <button 
-            onClick={activeTab === 'crop' ? handleAnalyzeCrop : handleAnalyzeIrrigation} 
+          <button
+            onClick={activeTab === 'crop' ? handleAnalyzeCrop : handleAnalyzeIrrigation}
             disabled={loading}
             className={`w-full text-white font-bold py-4 rounded-xl transition flex items-center justify-center gap-2 ${activeTab === 'crop' ? 'bg-agro-green hover:bg-green-800' : 'bg-blue-500 hover:bg-blue-600'}`}
           >
@@ -255,7 +255,7 @@ export default function Dashboard() {
         {/* OUTPUT PANEL */}
         <div className="w-full lg:w-2/3">
           {error && <div className="bg-red-100 text-red-700 p-4 rounded-xl mb-6">{error}</div>}
-          
+
           {/* CROP RESULTS */}
           {activeTab === 'crop' && (
             cropResults ? (
